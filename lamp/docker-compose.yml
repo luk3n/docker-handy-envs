@@ -1,0 +1,31 @@
+version: '2'
+services:
+    www:
+        build: .
+        ports: 
+            - "80:80"
+        volumes:
+            - ./www:/var/www/html/
+        links:
+            - db
+        networks:
+            - default
+    db:
+        image: mariadb:10.4.4
+        ports: 
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: "testDB"
+            MYSQL_USER: "foobar"
+            MYSQL_PASSWORD: "123456"
+            MYSQL_ROOT_PASSWORD: "toor"
+        networks:
+            - default
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        links: 
+            - db:db
+        ports:
+            - "8080:80"
+volumes:
+    persistent:
